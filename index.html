@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Points Coin</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+        .crt {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 60vh;
+            background: radial-gradient(circle, rgba(0, 255, 0, 0.1) 0%, rgba(0, 0, 0, 0.9) 60%);
+            border: 10px solid #00ff00;
+            padding: 20px;
+            box-shadow: 0 0 20px #00ff00;
+        }
+        .crt:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/noise.png');
+            mix-blend-mode: multiply;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+        .crt::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, transparent 0%, rgba(0, 255, 0, 0.1) 2%, transparent 5%, transparent 100%);
+            pointer-events: none;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .boot-logo {
+            text-align: center;
+            margin-top: 20%;
+            font-size: 2em;
+        }
+        .ascii-coin {
+            text-align: center;
+            font-size: 1.2em;
+            white-space: pre;
+        }
+        .terminal {
+            display: none;
+            font-size: 1em;
+            height: 100%;
+            overflow-y: auto;
+        }
+        .input-line {
+            display: flex;
+        }
+        .prompt {
+            margin-right: 10px;
+        }
+        #input {
+            background-color: rgba(0, 0, 0, 0);
+            border: none;
+            color: green;
+            font-family: 'Courier New', Courier, monospace;
+            outline: none;
+            width: 100%;
+        }
+        .command-history {
+            margin-bottom: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        #help-text {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="crt">
+        <div class="boot-logo" id="boot-logo">
+            Aura Points Coin<br>Booting...
+            <div class="ascii-coin" id="ascii-coin">
+                [====]
+            </div>
+        </div>
+        <div class="terminal" id="terminal">
+            <div id="help-text">Aura Points Coin Terminal v1.2.1<br />Type /help for commands</div>
+            <div id="output"></div>
+            <div class="input-line" id="input-line">
+                <span class="prompt">>_</span>
+                <input type="text" id="input" autofocus autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const bootLogo = document.getElementById('boot-logo');
+            const asciiCoin = document.getElementById('ascii-coin');
+            const terminal = document.getElementById('terminal');
+            const helpText = document.getElementById('help-text');
+            const output = document.getElementById('output');
+            const inputLine = document.getElementById('input-line');
+            const input = document.getElementById('input');
+            const commands = {
+                '/help': 'Available commands:\n/help\n/about\n/creators\n/clear',
+                '/about': 'Aura Points Coin (APC) is the ultimate meme coin showcasing the power of the internet.',
+                '/creators': 'APC was created by the anonymous wizards of the web.',
+                '/clear': ''
+            };
+
+            // ASCII Coin Animation
+            const coinFrames = [
+                "[====]",
+                "[====]\n |  ",
+                "[====]\n  ||",
+                "[====]\n || ",
+                "[====]\n|  |"
+            ];
+
+            let frame = 0;
+            const coinInterval = setInterval(() => {
+                asciiCoin.textContent = coinFrames[frame % coinFrames.length];
+                frame++;
+            }, 200);
+
+            setTimeout(() => {
+                clearInterval(coinInterval);
+                bootLogo.style.display = 'none';
+                terminal.style.display = 'block';
+                input.focus();
+            }, 2000); // Booting time: 10 seconds
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const command = input.value.trim();
+                    inputLine.classList.add('hidden'); // Hide input line
+                    if (commands[command] !== undefined) {
+                        if (command === '/clear') {
+                            output.innerHTML = '';
+                            inputLine.classList.remove('hidden'); // Show input line again
+                            input.value = '';
+                        } else {
+                            output.innerHTML += `> ${command}<br>`;
+                            let response = commands[command];
+                            let index = 0;
+
+                            const typewriterEffect = () => {
+                                if (index < response.length) {
+                                    output.innerHTML += response.charAt(index);
+                                    index++;
+                                    setTimeout(typewriterEffect, 50); // Typing speed
+                                } else {
+                                    output.innerHTML += '<br><br>';
+                                    inputLine.classList.remove('hidden'); // Show input line again
+                                    input.value = '';
+                                    input.focus();
+                                    output.scrollTop = output.scrollHeight;
+                                }
+                            };
+
+                            typewriterEffect();
+                        }
+                    } else {
+                        output.innerHTML += `> ${command}<br>Command not found<br><br>`;
+                        inputLine.classList.remove('hidden'); // Show input line again
+                        input.value = '';
+                    }
+                    output.scrollTop = output.scrollHeight;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
