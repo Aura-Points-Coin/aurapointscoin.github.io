@@ -7,7 +7,7 @@
     <style>
         body {
             background-color: black;
-            color: green;
+            color: rgb(255, 255, 255);
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
         }
@@ -50,8 +50,9 @@
         }
         .boot-logo {
             text-align: center;
-            margin-top: 20%;
-            font-size: 2em;
+            margin-top: 10%;
+            font-size: 1.5em;
+            white-space: pre;
         }
         .ascii-coin {
             text-align: center;
@@ -73,7 +74,7 @@
         #input {
             background-color: rgba(0, 0, 0, 0);
             border: none;
-            color: green;
+            color: rgb(255, 255, 255);
             font-family: 'Courier New', Courier, monospace;
             outline: none;
             width: 100%;
@@ -92,7 +93,14 @@
 <body>
     <div class="crt">
         <div class="boot-logo" id="boot-logo">
-            Aura Points Coin<br>Booting...
+                           _____      _       _          _____      _       
+    /\                    |  __ \    (_)     | |        / ____|    (_)      
+   /  \  _   _ _ __ __ _  | |__) |__  _ _ __ | |_ ___  | |     ___  _ _ __  
+  / /\ \| | | | '__/ _` | |  ___/ _ \| | '_ \| __/ __| | |    / _ \| | '_ \ 
+ / ____ \ |_| | | | (_| | | |  | (_) | | | | | |_\__ \ | |___| (_) | | | | |
+/_/    \_\__,_|_|  \__,_| |_|   \___/|_|_| |_|\__|___/  \_____\___/|_|_| |_|
+
+<br />Booting Terminal...
             <div class="ascii-coin" id="ascii-coin">
                 [====]
             </div>
@@ -143,7 +151,7 @@
                 bootLogo.style.display = 'none';
                 terminal.style.display = 'block';
                 input.focus();
-            }, 2000); // Booting time: 10 seconds
+            }, 7000); // Booting time: 10 seconds
 
             input.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
